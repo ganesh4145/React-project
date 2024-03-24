@@ -4,13 +4,65 @@ import { Link } from "react-router-dom";
 const Header = () => {
   return (
     <div>
-      <h1>Contact List Manager</h1>
-      <Link to="/add">
-        <button>Add Contact</button>
-      </Link>{" "}
-      <Link to="/get">
-        <button>Get Contact</button>
-      </Link>
+      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+        <div className="container-fluid">
+          <a className="navbar-brand">Contact Manager</a>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <li className="nav-item">
+                <Link
+                  to="/"
+                  className="nav-link active"
+                  aria-current="page"
+                  href="#"
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/add">
+                  <button
+                    className="btn btn-outline-success me-3"
+                    type="submit"
+                  >
+                    Add Contact
+                  </button>
+                </Link>
+              </li>
+              <li>
+                <Link to="/get">
+                  <button
+                    className="btn btn-outline-success me-3"
+                    type="submit"
+                  >
+                    Get Contact
+                  </button>
+                </Link>
+              </li>
+              <li>
+                <Link to="/delete">
+                  <button
+                    className="btn btn-outline-success me-3"
+                    type="submit"
+                  >
+                    Delete Contact
+                  </button>
+                </Link>
+              </li>
+              <li>
+                <Link to="/deleteall">
+                  <button
+                    className="btn btn-outline-success me-3"
+                    type="submit"
+                  >
+                    Delete All Contact
+                  </button>
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     </div>
   );
 };
