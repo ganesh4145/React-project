@@ -1,5 +1,3 @@
-// DeleteContact.js
-
 import React, { useState, useEffect, useMemo } from "react";
 import {
   useTable,
@@ -12,8 +10,11 @@ import axios from "axios";
 import { GlobalFilter } from "./Table/GlobalFilter";
 import { Checkbox } from "./Table/CheckBox";
 
-function DeleteContact() {
+function UpdateContact() {
   const [contactList, setContactList] = useState([]);
+  const [selectedContact, setSelectedContact] = useState(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const data = useMemo(() => contactList, [contactList]);
   const columns = useMemo(
     () => [
@@ -45,7 +46,6 @@ function DeleteContact() {
     gotoPage,
     pageCount,
     setPageSize,
-    selectedFlatRows,
   } = useTable(
     {
       columns,
@@ -69,48 +69,65 @@ function DeleteContact() {
     }
   );
 
-  const handleDelete = async (id) => {
-    console.log(id);
-
-    try {
-      await axios.delete(`http://localhost:5000/delete/${id}`);
-      fetchContact();
-    } catch (error) {
-      console.error("Error deleting contact:", error);
-    }
-  };
-
-  const handleDeleteAll = async () => {
-    const idsToDelete = selectedFlatRows.map((row) => row.original._id); // Use _id instead of id
-    console.log(idsToDelete);
-    try {
-      await Promise.all(
-        idsToDelete.map((id) =>
-          axios.delete(`http://localhost:5000/delete/${id}`)
-        )
-      );
-      fetchContact();
-    } catch (error) {
-      console.error("Error deleting contacts:", error);
-    }
-  };
-
   useEffect(() => {
+    const fetchContact = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/getcontact");
+        setContactList(response.data.getContact);
+      } catch (error) {
+        console.error("Error fetching contacts:", error);
+      }
+    };
     fetchContact();
   }, []);
 
-  const fetchContact = async () => {
+  const handleUpdateClick = (contact) => {
+    setSelectedContact(contact);
+    setName(contact.name);
+    setEmail(contact.mail);
+  };
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleUpdateContact = async () => {
+    console.log(email);
     try {
-      const response = await axios.get("http://localhost:5000/getcontact");
-      setContactList(response.data.getContact);
+      const updatedContact = await axios.put(
+        `http://localhost:5000/update/${selectedContact._id}`,
+        {
+          name,
+          email, // Change 'mail' to 'email'
+        }
+      );
+      const updatedContactList = contactList.map((contact) => {
+        if (contact._id === selectedContact._id) {
+          return { ...contact, name, email }; // Change 'mail' to 'email'
+        }
+        return contact;
+      });
+      setContactList(updatedContactList);
+      setSelectedContact(null);
     } catch (error) {
-      console.error("Error fetching contacts:", error);
+      console.error("Error updating contact:", error);
     }
+  };
+
+  const handleCloseClick = () => {
+    setSelectedContact(null);
+    setName("");
+    setEmail("");
   };
 
   if (contactList.length === 0) {
     return <div>No contacts found.</div>;
   }
+
   const selectedRowCount = Object.keys(selectedRowIds).length;
 
   return (
@@ -142,7 +159,11 @@ function DeleteContact() {
           {page.map((row) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
+              <tr
+                {...row.getRowProps()}
+                onClick={() => handleUpdateClick(row.original)}
+                style={{ cursor: "pointer" }}
+              >
                 {row.cells.map((cell) => {
                   return (
                     <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
@@ -197,38 +218,27 @@ function DeleteContact() {
           ))}
         </select>
       </div>
-      {/* <pre>
-        <code>
-          {JSON.stringify(
-            {
-              selectedFlatRows: selectedFlatRows.map((row) => row.original),
-            },
-            null,
-            2
-          )}
-        </code>
-      </pre> */}
-      <div>
-        {selectedRowCount === 0 ? (
-          <button disabled>Delete</button>
-        ) : selectedRowCount === 1 ? (
-          <button
-            className="btn btn-danger"
-            onClick={() => handleDelete(selectedFlatRows[0].original._id)} // Use _id instead of id
-          >
-            Delete
-          </button>
-        ) : (
-          <button
-            className="btn btn-danger"
-            onClick={handleDeleteAll} // Pass handleDeleteAll directly
-          >
-            Delete All
-          </button>
-        )}
-      </div>
+      {selectedRowCount === 1 && selectedContact && (
+        <div>
+          <div>
+            <label>Name:</label>
+            <input type="text" value={name} onChange={handleNameChange} />
+          </div>
+          <div>
+            <label>Email:</label>
+            <input type="email" value={email} onChange={handleEmailChange} />
+          </div>
+          <button onClick={handleUpdateContact}>Update</button>
+          <button onClick={handleCloseClick}>Close</button>
+        </div>
+      )}
+      {selectedRowCount !== 1 && (
+        <div>
+          <h2>Select exactly one row for update</h2>
+        </div>
+      )}
     </>
   );
 }
 
-export default DeleteContact;
+export default UpdateContact;

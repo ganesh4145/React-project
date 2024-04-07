@@ -50,12 +50,12 @@ const Header = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/deleteall">
+                <Link to="/update">
                   <button
                     className="btn btn-outline-success me-3"
                     type="submit"
                   >
-                    Delete All Contact
+                    Upadte Contact
                   </button>
                 </Link>
               </li>

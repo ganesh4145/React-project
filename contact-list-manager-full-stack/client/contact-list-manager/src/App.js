@@ -4,8 +4,7 @@ import Header from "./Components/Header";
 import AddContact from "./Components/AddContact";
 import GetContactList from "./Components/GetContactList";
 import DeleteContact from "./Components/DeleteContact";
-import DeleteAllContact from "./Components/DeleteAllContact";
-
+import UpdateConatct from "./Components/UpdateConatct";
 function App() {
   return (
     <Router>
@@ -17,7 +16,7 @@ function App() {
           <Route path="/add" element={<AddContact />} />
           <Route path="/get" element={<GetContactList />} />
           <Route path="/delete" element={<DeleteContact />} />
-          <Route path="/deleteall" element={<DeleteAllContact />} />
+          <Route path="/update" element={<UpdateConatct />} />
         </Routes>
       </div>
     </Router>
@@ -37,9 +36,11 @@ function Home() {
             </Link>
           </div>
           <div className="col">
-            <button className="btn btn-primary btn-lg btn-block">
-              Update Contact
-            </button>
+            <Link to="/delete">
+              <button className="btn btn-primary btn-lg btn-block">
+                Delete Contact
+              </button>
+            </Link>
           </div>
           <div className="col">
             <Link to="/get">
@@ -49,9 +50,9 @@ function Home() {
             </Link>
           </div>
           <div className="col">
-            <Link to="/delete">
+            <Link to="/update">
               <button className="btn btn-primary btn-lg btn-block">
-                Delete Contact
+                Update Contact List
               </button>
             </Link>
           </div>
