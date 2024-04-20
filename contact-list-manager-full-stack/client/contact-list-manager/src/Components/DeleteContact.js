@@ -12,7 +12,7 @@ import axios from "axios";
 import { GlobalFilter } from "./Table/GlobalFilter";
 import { Checkbox } from "./Table/CheckBox";
 
-function DeleteContact() {
+function DeleteContact({ selectedFields }) {
   const [contactList, setContactList] = useState([]);
   const data = useMemo(() => contactList, [contactList]);
   const columns = useMemo(

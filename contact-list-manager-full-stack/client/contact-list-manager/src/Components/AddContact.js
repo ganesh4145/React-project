@@ -70,75 +70,81 @@ class AddContact extends Component {
     const mailInputClass = mailValid
       ? "form-control"
       : "form-control is-invalid";
+
+    const { selectedFields } = this.props;
     return (
       <div className="d-flex justify-content-center align-items-center">
         <form onSubmit={this.add}>
-          <div className="mb-3">
-            <label htmlFor="name" className="form-label">
-              Name
-            </label>
-            <input
-              className={`${nameInputClass} ${
-                clicked && name === "" ? "is-invalid" : ""
-              } ${!nameLengthValid ? "form-control is-invalid" : ""}`}
-              type="text"
-              id="name"
-              name="name"
-              placeholder="Name"
-              value={name}
-              onClick={this.handleClick}
-              onChange={(e) => {
-                const newName = e.target.value;
-                this.setState({
-                  name: newName,
-                  nameValid: this.nameValidation(newName),
-                  nameLengthValid: this.nameLengthValidation(newName),
-                });
-              }}
-              required
-            />
-            {!nameValid && (
-              <div className="invalid-feedback">
-                Name can only contain alphabets, alphabets with number, periods
-                (.)
-              </div>
-            )}
-            {!nameLengthValid && (
-              <div className="invalid-feedback">
-                Name should be less than or equal to 50 characters
-              </div>
-            )}
-          </div>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email
-            </label>
-            <input
-              className={`${mailInputClass} ${
-                clicked && mail === "" ? "is-invalid" : ""
-              }`}
-              type="email"
-              id="email"
-              name="email"
-              pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-              placeholder="Email-ID"
-              value={mail}
-              onClick={this.handleClick}
-              onChange={(e) => {
-                const newMail = e.target.value;
-                this.setState({
-                  mail: newMail,
-                  mailValid: this.mailValidation(newMail),
-                });
-              }}
-              required
-            />
-            {!mailValid && (
-              <div className="invalid-feedback">
-                Please enter a valid email address
-              </div>
-            )}
-          </div>
+          {selectedFields && selectedFields.includes("Name") && (
+            <div className="mb-3">
+              <label htmlFor="name" className="form-label">
+                Name
+              </label>
+              <input
+                className={`${nameInputClass} ${
+                  clicked && name === "" ? "is-invalid" : ""
+                } ${!nameLengthValid ? "form-control is-invalid" : ""}`}
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Name"
+                value={name}
+                onClick={this.handleClick}
+                onChange={(e) => {
+                  const newName = e.target.value;
+                  this.setState({
+                    name: newName,
+                    nameValid: this.nameValidation(newName),
+                    nameLengthValid: this.nameLengthValidation(newName),
+                  });
+                }}
+                required
+              />
+              {!nameValid && (
+                <div className="invalid-feedback">
+                  Name can only contain alphabets, alphabets with number,
+                  periods (.)
+                </div>
+              )}
+              {!nameLengthValid && (
+                <div className="invalid-feedback">
+                  Name should be less than or equal to 50 characters
+                </div>
+              )}
+            </div>
+          )}
+          {selectedFields && selectedFields.includes("Email") && (
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">
+                Email
+              </label>
+              <input
+                className={`${mailInputClass} ${
+                  clicked && mail === "" ? "is-invalid" : ""
+                }`}
+                type="email"
+                id="email"
+                name="email"
+                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                placeholder="Email-ID"
+                value={mail}
+                onClick={this.handleClick}
+                onChange={(e) => {
+                  const newMail = e.target.value;
+                  this.setState({
+                    mail: newMail,
+                    mailValid: this.mailValidation(newMail),
+                  });
+                }}
+                required
+              />
+              {!mailValid && (
+                <div className="invalid-feedback">
+                  Please enter a valid email address
+                </div>
+              )}
+            </div>
+          )}
           <button
             type="submit"
             className="btn btn-primary"

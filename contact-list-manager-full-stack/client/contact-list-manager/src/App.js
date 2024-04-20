@@ -1,11 +1,19 @@
-import React from "react";
+import { React, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Header from "./Components/Header";
 import AddContact from "./Components/AddContact";
 import GetContactList from "./Components/GetContactList";
 import DeleteContact from "./Components/DeleteContact";
 import UpdateConatct from "./Components/UpdateConatct";
+import ConfigPage from "./Components/ConfigPage";
+
 function App() {
+  const [selectedFields, setSelectedFields] = useState([]);
+
+  const handleFieldSelection = (fields) => {
+    setSelectedFields(fields);
+  };
+
   return (
     <Router>
       <div>
@@ -13,10 +21,23 @@ function App() {
         <hr />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/add" element={<AddContact />} />
-          <Route path="/get" element={<GetContactList />} />
-          <Route path="/delete" element={<DeleteContact />} />
+          <Route
+            path="/add"
+            element={<AddContact selectedFields={selectedFields} />}
+          />
+          <Route
+            path="/get"
+            element={<GetContactList selectedFields={selectedFields} />}
+          />
+          <Route
+            path="/delete"
+            element={<DeleteContact selectedFields={selectedFields} />}
+          />
           <Route path="/update" element={<UpdateConatct />} />
+          <Route
+            path="/configpage"
+            element={<ConfigPage onSelectFields={handleFieldSelection} />}
+          />
         </Routes>
       </div>
     </Router>

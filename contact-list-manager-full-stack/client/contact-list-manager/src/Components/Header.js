@@ -61,6 +61,11 @@ const Header = () => {
               </li>
             </ul>
           </div>
+          <div className="col">
+            <Link to="/ConfigPage">
+              <button className="position-absolute top-0 start-1">⚙</button>
+            </Link>
+          </div>
         </div>
       </nav>
     </div>
